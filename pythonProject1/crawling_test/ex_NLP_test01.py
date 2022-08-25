@@ -6,7 +6,7 @@ import scipy
 
 print(numpy.__version__)
 print(scipy.__version__)
-sur = pd.read_csv('inter.csv')
+sur = pd.read_csv('csv/inter.csv')
 print(sur.info())
 sur.columns = ["date", "comment", "satisfaction"]
 

@@ -11,3 +11,4 @@ cur.execute(""" CREATE TABLE naver_map_url(
                      url text
                 )        
 """)
+
