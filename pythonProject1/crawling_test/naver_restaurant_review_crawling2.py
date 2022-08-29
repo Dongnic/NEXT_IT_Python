@@ -29,7 +29,7 @@ def set_chrome_driver():
 
 
 option = webdriver.ChromeOptions()
-# option.add_argument("headless")
+option.add_argument("headless")
 option.add_argument('user-agent='+
 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36')
 driver = set_chrome_driver()
@@ -44,7 +44,7 @@ for i, keyword in enumerate(df['naver_keyword'].tolist()):
         naver_map_search_url = f"https://m.map.naver.com/search2/search.naver?query=대전%20{keyword}&sm=hty&style=v5"
 
         driver.get(naver_map_search_url)
-        time.sleep(2)
+        time.sleep(3)
         df.iloc[i, -1] = driver.find_element(By.CSS_SELECTOR,
             "#ct > div.search_listview._content._ctList > ul > li:nth-child(1) > div.item_info > a.a_item.a_item_distance._linkSiteview").get_attribute(
             'data-cid')
@@ -57,21 +57,21 @@ for i, keyword in enumerate(df['naver_keyword'].tolist()):
                 df.iloc[i, -1] = driver.find_element(By.CSS_SELECTOR,
                     "#ct > div.search_listview._content._ctList > ul > li:nth-child(1) > div.item_info > a.a_item.a_item_distance._linkSiteview").get_attribute(
                     'data-cid')
-                time.sleep(2)
+                time.sleep(3)
             except Exception as e2:
                 print(e2)
                 df.iloc[i, -1] = np.nan
-                time.sleep(2)
+                time.sleep(3)
         else:
             pass
     finally:
         cur = con.cursor()
         query = """
                     update url_data
-                    set (naver_map_url, naver_keyword) = (?, ?)
+                    set naver_map_url = ?
                     where lat == ?
                 """
-        cur.execute(query, (df.iloc[i, -1], df.iloc[i, 12], df.iloc[i, 10]))
+        cur.execute(query, (df.iloc[i, -1], df.iloc[i, 10]))
         con.commit()
 driver.quit()
 

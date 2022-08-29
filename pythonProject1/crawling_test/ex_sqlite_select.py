@@ -3,11 +3,11 @@ import sqlite3
 conn = sqlite3.connect('naver_map_url.db')
 cur = conn.cursor()
 query = """
-            select rowid from url_data
+            select naver_map_url from url_data
         """
 cur.execute(query)
 print(cur.rowcount)
 # 전체
 rows = cur.fetchall()
-print(rows)
+print(str(rows))
 conn.close()
