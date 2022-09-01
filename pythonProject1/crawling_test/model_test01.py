@@ -1,4 +1,7 @@
 import logging, os
+
+from sklearn.model_selection import train_test_split
+
 logging.disable(logging.WARNING)
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
 import tensorflow as tf
@@ -15,7 +18,9 @@ total_data['label'] = np.select([total_data.ratings > 3], [1], default=0)
 total_data['ratings'].nunique(), total_data['reviews'].nunique(), total_data['label'].nunique()
 total_data.drop_duplicates(subset=['reviews'], inplace=True) # reviews 열에서 중복인 내용이 있다면 중복 제거
 print('총 샘플의 수 :',len(total_data))
-train_data = total_data
+train_data, test_data = train_test_split(total_data, test_size = 0.2, random_state = 42)
+print('훈련용 리뷰의 개수 :', len(train_data))
+print('테스트용 리뷰의 개수 :', len(test_data))
 train_data['reviews'] = train_data['reviews'].str.replace("[^ㄱ-ㅎㅏ-ㅣ가-힣 ]", "", regex=True)
 train_data['reviews'].replace('', np.nan, inplace=True)
 print(train_data.isnull().sum())
@@ -40,11 +45,11 @@ for key, value in tokenizer.word_counts.items():
         rare_freq = rare_freq + value
 
 vocab_size = total_cnt - rare_cnt + 2
+print(vocab_size)
 tokenizer = Tokenizer(vocab_size, oov_token='OOV')
-print(X_train)
+np.save('model/vocab_token2.npy', X_train)
+print(type(X_train))
 tokenizer.fit_on_texts(X_train)
-
-
 max_len = 80
 model = tf.keras.models.load_model('model/ko_model01.h5')
 
