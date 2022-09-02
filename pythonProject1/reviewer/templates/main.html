@@ -1,0 +1,19 @@
+{% extends 'top.html' %}
+{% block content %}
+    <div class="col-6" id="coin_list">
+        <table id="id_table" class="table table-hover">
+            <tobdy>
+            {% for x in coins%}
+                <tr><td>{{x.korean_name}}</td>
+                    <td>{{x.english_name}}</td>
+                    <td>{{x.market}}</td>
+                </tr>
+            {% endfor%}
+            </tobdy>
+        </table>
+    </div>
+    <div class="col-6">
+        <table id="id_table_sub" class="table table-hover">
+        </table>
+    </div>
+{% endblock %}
